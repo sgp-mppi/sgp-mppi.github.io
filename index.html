@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <!-- need to change -->
+
+  <meta name="description"
+    content="Performance Enhanced Risk-Aware MPPI using Gaussian Process for Robust Mobile Robot Control">
+  <meta name="keywords" content="GP RAMPPI, GP-RAMPPI">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GP RAMPPI</title>
+
+  <!-- need to change -->
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.ico">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['$$', '$$']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Performance Enhanced Risk-Aware MPPI using Gaussian Process for
+              Robust Mobile Robot Control</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://sites.google.com/site/cdslweb">Fauz Hanif Edma</a><sup>1</sup>,</span>
+              <span class="author-block">
+                Jae-Han Park<sup>2</sup>, and </span>
+              <span class="author-block">
+                <a href="https://sites.google.com/site/cdslweb">Jung-Su Kim</a><sup>1</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Department of Electrical and Information Engineering, Seoul
+                National University of Science and Technology</span>
+              <span class="author-block"><sup>2</sup>AI Robot R&D Department, Korea Institute of Industrial Technology
+                (KITECH)</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- Video Link. -->
+                <span class="link-block">
+                  <a href="https://youtube.com/playlist?list=PLnuzMlHfcWBVYMgt67vsmhfkZ4rNOXP2B&feature=shared"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                    </span>
+                    <span>Video</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://ieeexplore.ieee.org/document/11278001"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-vcentered">
+
+        <!-- Left column: Gazebo simulation -->
+        <div class="column has-text-centered">
+          <video autoplay muted loop playsinline width="100%">
+            <source src="./static/videos/proposed diff.webm" type="video/webm">
+            Your browser does not support the video tag.
+          </video>
+          <h2 class=" subtitle mt-2">
+            Proposed method run in Gazebo simulation
+          </h2>
+        </div>
+
+        <!-- Right column: Real-world -->
+        <div class="column has-text-centered">
+          <video autoplay muted loop playsinline width="100%">
+            <source src="./static/videos/W-obs-proposed smooth.webm" type="video/webm">
+            Your browser does not support the video tag.
+          </video>
+          <h2 class="subtitle mt-2">
+            Proposed method run in real-world
+          </h2>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop mb-6">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              This paper presents a performance enhanced Risk-Aware Model Predictive Path Integral (RA‑MPPI) control
+              using Gaussian-process (GP). To this end, the real system is run with arbitrary control input and the
+              resulting data is saved. Based on the nominal model of the system and the collected data, uncertainty
+              affecting the state transition is estimated by a Jacobian-based method offline. Then, the used control
+              input and the estimated uncertainty are used to train the Gaussian process which generates the mean and
+              variance of the uncertainty. Online, the gap between the nominal and real dynamics is compensated by the
+              trained GP. In other words, the nominal model is refined using the estimated noise mean, while the
+              estimated noise variance is directly incorporated into the RA‑MPPI framework, eliminating the need to
+              manually tune the disturbance covariance parameter. Validation is conducted through simulation experiments
+              in Gazebo using a F1TENTH car with a bicycle model navigating a track with and without obstacles. Also,
+              real‑world performance is further demonstrated on the F1TENTH car platform driving the same track under
+              similar conditions. Across both simulation and real‑world scenarios, the proposed method demonstrates
+              improved safety and trajectory tracking performance compared to baseline MPPI and RA‑MPPI techniques in
+              terms of lap times and the number of crash‑free lap completions. Videos of the F1TENTH car simulations,
+              experiments, and similar Gazebo simulation results using a Clearpath Jackal with a differential drive
+              model are available at the project webpage:
+              <a href="https://gp-ramppi.github.io" target="_blank">https://gp-ramppi.github.io</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+
+      <div class="columns is-centered has-text-centered mt-6">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">The proposed method (summarized)</h2>
+          <div class="content has-text-justified">
+            <figure class="image">
+              <img src="./static/images/ramppi_with_gp_framework2.png"
+                alt="Framework diagram of GP-RAMPPI showing integration of Gaussian Process model into the RA-MPPI controller."
+                loading="lazy">
+              <figcaption class="has-text-centered mt-2" style="font-style: normal;">
+                FIGURE 1: The proposed Risk-Aware MPPI with Gaussian Process framework for mobile robot
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h3 class="title is-4">Offline</h3>
+          <div class="content has-text-justified">
+            <ol>
+              <li>
+                <strong>Collect data in open space.</strong>
+                Drive the robot in open space manually or with a simple controller (e.g., baseline MPPI) at
+                speeds/trajectories
+                similar to the
+                target task and log pairs
+                \( (u_k, x_{k+1}) \) to form the dataset \( \mathcal{D}=\{(u_k,x_{k+1})\}_{k=0}^{N-1} \).
+              </li>
+
+              <li>
+                <strong>Estimate actual input and lumped uncertainty (Jacobian-based).</strong>
+                For each sample \(k\), initialize \(u_{\mathrm{act},k}^{(0)} = u_k\) and iterate:
+                <div class="list-middle-wrap content-tight">
+                  <ol class="list-middle">
+                    <li>\(\hat{x}_{k+1}^{(i)} = f(x_k,\;u_{\mathrm{act},k}^{(i)})\)</li>
+                    <li>\(\Delta x_k^{(i)} = x_{k+1} - \hat{x}_{k+1}^{(i)}\)</li>
+                    <li>\(\delta u^{(i)} = J\!\big(x_k,u_{\mathrm{act},k}^{(i)}\big)^{\dagger}\,\Delta x_k^{(i)}\)</li>
+                    <li>\(u_{\mathrm{act},k}^{(i+1)} = u_{\mathrm{act},k}^{(i)} + \alpha\,\delta u^{(i)},\ (0<\alpha\le
+                        1)\)</li>
+                  </ol>
+                </div>
+                where \(J=\partial f/\partial u\) and \(^{\dagger}\) denotes the pseudo-inverse. After
+                convergence, compute the lumped input-channel uncertainty
+                \( \hat{w}_k = u_k - \hat{u}_{\mathrm{act},k} \), and build
+                \( \mathcal{D}_w=\{(u_k,\hat{w}_k)\}_{k=0}^{N-1} \).
+              </li>
+
+              <li>
+                <strong>Train Gaussian Processes per input channel.</strong>
+                Fit \(n_u\) independent GPs (RBF kernel) on \( \mathcal{D}_w \) to learn \( u \mapsto w \).
+                Hyperparameters (e.g., \( \sigma_f, \ell \)) are optimized via negative log marginal likelihood
+                minimization.
+                The trained models return, for any input \(u\),
+                a <em>mean</em> \( f_{\mu}(u) \) and <em>variance</em> \( f_{\sigma^2}(u) \) of the uncertainty:
+                \( f_{\mathcal{GP}}(u) \sim \mathcal{N}\!\big(f_{\mu}(u),\,f_{\sigma^2}(u)\big) \).
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns is-centered has-text-centered mb-6">
+        <div class="column is-four-fifths">
+          <h3 class="title is-4">Online</h3>
+          <div class="content has-text-centered">
+            The block diagram below shows a simplified overview of the proposed online algorithm; full details are
+            provided in the paper.<br>
+            <figure class="image">
+              <img src="./static/images/gpramppi_online.png"
+                alt="Framework diagram of GP-RAMPPI showing integration of Gaussian Process model into the RA-MPPI controller."
+                loading="lazy">
+              <figcaption class="has-text-centered mt-2" style="font-style: normal;">
+                FIGURE 2: Simplified overview of the proposed online algorithm.
+              </figcaption>
+            </figure>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- Paper video. -->
+      <div class="columns is-centered has-text-centered mt-6">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Application to Mobile Robot</h2>
+          <h3 class="title is-4">F1TENTH</h3>
+        </div>
+      </div>
+
+
+      <!-- Paper video. -->
+      <div class="columns is-centered has-text-centered mb-6">
+        <div class="column is-four-fifths">
+          <h4 class="title is-5">Model</h4>
+          <div class="content list-middle-wrap content-tight">
+            <ul class="list-middle">
+              <li>
+                The robot is modeled as a bicycle model with state
+                \( x = (p_x, p_y, \theta) \) (position and heading).
+              </li>
+              <li>
+                The control inputs are \( u = (v, \delta) \), where
+                \(v\) is the velocity and \(\delta\) is the steering angle.
+              </li>
+              <li>
+                With sampling time \(T_s\), the discrete-time kinematics are:
+                $$\begin{aligned}
+                p_{x,k+1} &= p_{x,k} + T_s\, v_k \cos(\theta_k),\\
+                p_{y,k+1} &= p_{y,k} + T_s\, v_k \sin(\theta_k),\\
+                \theta_{k+1} &= \theta_k + T_s\,\frac{v_k}{L}\,\tan(\delta_k),
+                \end{aligned}$$
+                where \(L\) is the wheelbase of the vehicle (constant for the F1TENTH car).
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paper video. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h3 class="title is-4">Gazebo Simulation Evaluation</h3>
+          <h4 class="title is-5">Parameters</h4>
+          <div class="content list-middle-wrap content-tight">
+            <ul class="list-middle">
+              <li><strong>Sampling rate:</strong> 50.0 Hz (T<sub>s</sub> = 0.02 s)</li>
+              <li><strong>Time horizon:</strong> 1.5 s (Prediction horizon K = 75 steps)</li>
+              <li><strong>Number of trajectories:</strong> M = 256</li>
+              <li><strong>Exploration variance:</strong> γ = 1200.0</li>
+              <li><strong>Control covariance:</strong> Σ<sub>v</sub> = diag(0.3², 0.4²)</li>
+              <li><strong>Inverse temperature:</strong> λ = 0.01</li>
+              <li><strong>State weights:</strong> W = diag(1, 1, 0)</li>
+              <li><strong>Control weights:</strong> R = λ Σ<sub>v</sub><sup>−1/2</sup></li>
+              <li><strong>Collision cost:</strong> C<sub>col</sub> = 10⁷</li>
+              <li><strong>Max velocity:</strong> 3 m/s</li>
+              <li><strong>Max steer:</strong> 1 rad</li>
+              <li><strong>RA-MPPI number of aware trajectories:</strong> N = 16</li>
+              <li><strong>RA-MPPI weight parameters:</strong> A = 0.1, B = 0.9</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paper video. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="publication-video">
+            <iframe src="https://www.youtube.com/embed/wznnwawFi6k?rel=0&amp;showinfo=0" frameborder="0"
+              allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns is-centered has-text-centered mb-6">
+        <div class="column is-four-fifths">
+          F1TENTH Gazebo simulation evaluation result's table and analysis can be seen in the paper.
+        </div>
+      </div>
+
+      <!-- Paper video. -->
+      <div class="columns is-centered has-text-centered mt-6">
+        <div class="column is-four-fifths">
+          <h3 class="title is-4">Real-World Evaluation</h3>
+          <h4 class="title is-5">Parameters</h4>
+          <div class="content list-middle-wrap content-tight">
+            <ul class="list-middle">
+              <li>
+                All components of the control stack—cost function, Jacobian-based uncertainty estimation, Gaussian
+                process (GP)
+                training, evaluation metrics, and controller parameters—remain similar to those used in simulation.
+              </li>
+              <li>
+                Only the controller's <strong>sampling rate</strong> is adjusted to 20.0 Hz
+                (T<sub>s</sub> = 0.05 s), and the <strong>control covariance</strong> is set to
+                Σ<sub>v</sub> = diag(0.3², 0.3²),
+                to accommodate differences in the hardware platform and slight variations in vehicle dynamics.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paper video. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="publication-video">
+            <iframe src="https://www.youtube.com/embed/S-0TqapzAsU?rel=0&amp;showinfo=0" frameborder="0"
+              allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns is-centered has-text-centered mb-6">
+        <div class="column is-four-fifths">
+          F1TENTH real-world evaluation result's table and analysis can be seen in the paper.
+        </div>
+      </div>
+
+      <!--/ Paper video. -->
+
+
+      <!-- Paper video. -->
+      <div class="columns is-centered has-text-centered mt-6 mb-6">
+        <div class="column is-four-fifths">
+          <h3 class="title is-4">Clearpath Jackal</h3>
+          <h4 class="title is-5">Model</h4>
+          <div class="content list-middle-wrap content-tight">
+            <ul class="list-middle">
+              <li>
+                The robot is modeled as a differential drive with state
+                \( x = (p_x, p_y, \theta) \) (position and heading).
+              </li>
+              <li>
+                The control inputs are \( u = (v, \omega) \), where
+                \(v\) is linear velocity and \(\omega\) is angular velocity.
+              </li>
+              <li>
+                With sampling time \(T_s\), the discrete-time kinematics are:
+                $$\begin{aligned}
+                p_{x,k+1} &= p_{x,k} + T_s\, v_k \cos\theta_k,\\
+                p_{y,k+1} &= p_{y,k} + T_s\, v_k \sin\theta_k,\\
+                \theta_{k+1} &= \theta_k + T_s\, \omega_k.
+                \end{aligned}$$
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Paper video. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h3 class="title is-4">Gazebo Simulation</h3>
+        </div>
+      </div>
+
+
+
+      <!-- Paper video. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div class="publication-video">
+            <iframe src="https://www.youtube.com/embed/VFMfThjjeKU?rel=0&amp;showinfo=0" frameborder="0"
+              allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+      <!--/ Paper video. -->
+
+
+
+
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h4 class="title is-5">Result</h4>
+          <div class="content has-text-justified content-tight">
+            <figure class="image">
+              <figcaption class="has-text-centered" style="font-style: normal;">
+                TABLE 1: Number of Laps Completed in Each Trial and Total Laps per Method. Each sub-table corresponds
+                to
+                one of the two scenarios:
+                (a) Jackal without obstacles,
+                (b) Jackal with obstacles.
+                Here, <em>T<sub>i</sub></em> denotes trial <em>i</em>.
+                The “Total” column shows the sum of laps completed over all 10 trials.
+              </figcaption>
+              <img src="./static/images/jackal result 1.png" loading="lazy">
+            </figure>
+            <figure class="image">
+              <figcaption class="has-text-centered" style="font-style: normal;">
+                TABLE 2: Average Lap Time (Over Completed Laps) and Average Computation Time per Control Step. Average
+                lap time is in seconds (s); Computation time is in milliseconds (ms).
+                Note that for methods with zero completed laps, the lap-time is not defined.
+              </figcaption>
+              <img src="./static/images/jackal result 2.png" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h4 class="title is-5">Analysis</h4>
+          <div class="content list-middle-wrap content-tight">
+            <ul class="list-middle">
+              <li>
+                MPPI that use the <strong>GP mean</strong> tend to increase the number of completed laps
+                (especially <em>Case 5</em>) compared to the baseline MPPI methods (<em>Cases 6 and 7</em>).
+              </li>
+              <li>
+                By leveraging both the <strong>GP mean and variance</strong> (the proposed method, <em>Case 1</em>),
+                the system achieves the highest number of completed laps while maintaining competitive speed.
+              </li>
+              <li>
+                The <strong>proposed method</strong> demonstrates computation times comparable to those of
+                MPPI with \(M \times N\) trajectories and RA-MPPI (<em>Cases 2, 3, 4, and 6</em>).
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Original content omitted for brevity in this explanation; full content preserved in canvas -->
+
+
+      <!-- ================= APPENDIX ADDED HERE ================= -->
+      <section class="section">
+
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3 has-text-centered mb-6">Appendix: Convergence Analysis of the Gauss-Newton Uncertainty
+              Estimation Iteration</h2>
+
+
+            <h3 class="title is-4 has-text-centered">Theorem Statement</h3>
+            <p>Consider the discrete-time system
+              $$ x_{k+1} = f(x_k, u_{\mathrm{act}}), $$
+              where $x_k \in \mathbb{R}^{n_x}$ is the state at time step $k$, $u_{\mathrm{act}} \in \mathbb{R}^{n_u}$
+              the
+              actual control input, and $f$ a sufficiently smooth function describing the known nominal model. The goal
+              is to identify $u_{\mathrm{act}}$ by solving
+              $$ x_{k+1} - f(x_k, u) = 0. $$
+            </p>
+
+
+            <p>Define the residual function
+              $$ \mathbf{r}(u) = x_{k+1} - f(x_k, u), $$
+              so that we seek $u^* = u_{\mathrm{act}}$ satisfying $\mathbf{r}(u^*) = 0$.
+            </p>
+
+
+            <p>The iterative update rule is
+              $$ u^{(i+1)} = u^{(i)} + \alpha J^{\dagger}(u^{(i)})\, \mathbf{r}(u^{(i)}), $$
+              where $J = \partial f / \partial u$ and $J^{\dagger}$ is the Moore–Penrose pseudoinverse.
+            </p>
+
+
+            <p class="mt-2"><strong>Theorem:</strong> Under standard smoothness conditions, proper step size $\alpha$,
+              and an initial
+              guess sufficiently close to $u^*$, this iteration converges locally to $u^*$ if
+              $$ \| I_{n_u} - \alpha J^{\dagger}(u^*) J(u^*) \| < 1. $$ </p>
+
+
+                <h3 class="title is-4 mt-6 has-text-centered">Proof</h3>
+                <p>The proof proceeds via a fixed-point contraction argument...</p>
+
+
+                <h4 class="title is-5  mt-6 has-text-centered">Fixed-Point View</h4>
+                <p>Define
+                  $$ \mathbf{G}(u) = u + \alpha J^{\dagger}(u)[x_{k+1} - f(x_k,u)], $$
+                  so a solution satisfies $\mathbf{G}(u^*) = u^*$.
+                </p>
+
+
+                <h4 class="title is-5  mt-6 has-text-centered">Local Convergence Criterion</h4>
+                <p>The Jacobian of $\mathbf{G}$ near $u^*$ satisfies approximately
+                  $$ D\mathbf{G}(u^*) \approx I_{n_u} - \alpha J^{\dagger}(u^*) J(u^*). $$
+                  Local contraction holds if its norm is strictly less than 1.
+                </p>
+
+
+                <h4 class="title is-5  mt-6 has-text-centered">Computing $D\mathbf{G}(u^*)$</h4>
+                <p>Since $\partial \mathbf{r} / \partial u = -J$, one obtains
+                  $$ D\mathbf{G}(u^*) \approx I_{n_u} - \alpha J^{\dagger}(u^*) J(u^*). $$
+                </p>
+
+
+                <h4 class="title is-5  mt-6 has-text-centered">Local Convergence Under the Condition</h4>
+                <p>If
+                  $$ \| I_{n_u} - \alpha J^{\dagger}(u^*) J(u^*) \| < 1, $$ then $\mathbf{G}$ is locally contractive,
+                    and the iteration converges to $u^*$. </p>
+
+
+                    <h4 class="title is-5  mt-6 has-text-centered">Why the Condition Often Holds</h4>
+                    <p>If $J(u^*)$ has full column rank, then
+                      $$ J^{\dagger}(u^*) J(u^*) = I_{n_u}, $$
+                      leading to
+                      $$ \| (1-\alpha)I_{n_u} \| = |1-\alpha| < 1 \quad (\alpha>0). $$
+                    </p>
+
+
+                    <h4 class="title is-5  mt-6 has-text-centered">Overdetermined or Underdetermined Cases</h4>
+                    <p>The iteration still converges if the Jacobian has full column (overdetermined) or row
+                      (underdetermined) rank, ensuring proper least-squares or minimum-norm updates.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+
+
+
+
+
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              Template comes from <a href="https://github.com/nerfies/nerfies.github.io">nerfies</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
